@@ -53,7 +53,7 @@ from utils import *
 
 # paramters
 patch_size = 32 #16
-batch_size = 16 # 32
+batch_size = 32 # 32
 sigma      = 32/255
 
 # Image Preprocessing
@@ -228,7 +228,7 @@ class Net(nn.Module):
 
 net = Net()
 # net.load_state_dict(torch.load('./net.pkl'))
-net.load_state_dict(torch.load('./net_weights/net_p32.pkl'))
+net.load_state_dict(torch.load('./net.pkl'))
 
 
 if torch.cuda.is_available():
