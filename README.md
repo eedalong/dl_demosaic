@@ -3,7 +3,8 @@
 * bayer1ch case  
   * weird circle issue at center(wrong color)  
   * need to comapare with bayer3ch case  
-    * without weired circle
+    * without weired circle at bayer3ch
+  * more epochs?   
 
 
 ## like moire, hard traing patches
