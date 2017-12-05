@@ -48,11 +48,11 @@ import torchvision.transforms as transforms
 from torch.autograd import Variable
 import torchvision
 from utils import *
-
+import cv2
 
 
 # paramters
-patch_size = 32 #16
+patch_size = 16 #16
 batch_size = 32 # 32
 sigma      = 32/255
 
@@ -88,9 +88,6 @@ trainloader = torch.utils.data.DataLoader(dataset=trainset,
 testloader = torch.utils.data.DataLoader(dataset=testset,
                                           batch_size = batch_size,
                                           shuffle    = False)
-
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 
 
@@ -195,7 +192,7 @@ class Net(nn.Module):
         self.ch_l2 = 64 # 64
         self.ch_l3 = 3
         self.layer1 = nn.Sequential(
-            nn.Conv2d(3, self.ch_l2, kernel_size=3, padding=1),
+            nn.Conv2d(1, self.ch_l2, kernel_size=3, padding=1),
             nn.ReLU())
         self.layer2 = nn.Sequential(
             nn.Conv2d(self.ch_l2, self.ch_l2, kernel_size=3, padding=1),
@@ -227,8 +224,8 @@ class Net(nn.Module):
 
 
 net = Net()
-# net.load_state_dict(torch.load('./net.pkl'))
 net.load_state_dict(torch.load('./net.pkl'))
+# net.load_state_dict(torch.load('./net_weights/net_p32.pkl'))
 
 
 if torch.cuda.is_available():
@@ -256,10 +253,10 @@ fig, axs = plt.subplots(2,2)
 for data in testloader:
     images, labels = data
 
-    # add noise gaussian random
     # Remosaic : RGB to bayer
-    i_bayer = remosaic(images)
-
+    i_bayer = remosaic(images, 0)  # 1ch bayer
+    # demosaic with CV2
+    dem_cv2 = demosaic_cv2(i_bayer, 0)
 
 
     if torch.cuda.is_available():
@@ -278,14 +275,18 @@ for data in testloader:
 
 
     #
+    bayer_rgb = remosaic(images, 1)  # 3ch bayer
+
     images = unnormalize(images.cpu())
-    i_bayer = unnormalize(i_bayer.cpu())
+    i_bayer = unnormalize(bayer_rgb.cpu())
     predicted_dem = unnormalize(predicted_dem.cpu())
+    dem_alg = unnormalize(dem_cv2.cpu())
 
     # show images
     # fig, axs = plt.subplots(2,2)
     axs[0,0].imshow(images)
     axs[1,0].imshow(i_bayer)
     axs[0,1].imshow(predicted_dem)
+    axs[1,1].imshow(dem_alg)
 
     plt.pause(3)

@@ -52,10 +52,10 @@ from utils import *
 
 
 # paramters
-patch_size = 32
-batch_size = 64 # 32
+patch_size = 16
+batch_size = 32 # 32
 sigma      = 32/255
-no_epoch   = 64
+no_epoch   = 4
 
 
 # Image Preprocessing
@@ -91,9 +91,6 @@ testloader = torch.utils.data.DataLoader(dataset=testset,
                                           batch_size = batch_size,
                                           shuffle    = False)
 
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
-
 
 ########################################################################
 # Let us show some of the training images, for fun.
@@ -105,21 +102,7 @@ images, labels = dataiter.next()
 
 # show images
 imshow(torchvision.utils.make_grid(images))
-print(images.size())
-print(images.type())
-
-# print labels
-print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
-
-
-# add noise gaussian random
-im_noise = add_noise(images, sigma)
-
-# show images
-imshow(torchvision.utils.make_grid(im_noise), 1)
 print('data preparation completed')
-
-
 
 
 
@@ -223,7 +206,7 @@ class Net(nn.Module):
         self.ch_l2 = 64 # 64
         self.ch_l3 = 3
         self.layer1 = nn.Sequential(
-            nn.Conv2d(3, self.ch_l2, kernel_size=3, padding=1),
+            nn.Conv2d(1, self.ch_l2, kernel_size=3, padding=1),
             nn.ReLU())
         self.layer2 = nn.Sequential(
             nn.Conv2d(self.ch_l2, self.ch_l2, kernel_size=3, padding=1),
@@ -287,7 +270,8 @@ for epoch in range(no_epoch):  # loop over the dataset multiple times
 
 
         # Remosaic : RGB to bayer
-        i_bayer = remosaic(inputs)
+        # i_bayer = remosaic(inputs, 1)  # 3ch bayer
+        i_bayer = remosaic(inputs, 0)  # 1ch bayer
 
 
         # ground truth : noisy image - clean image(noise)
