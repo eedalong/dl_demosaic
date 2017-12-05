@@ -5,7 +5,8 @@
   * need to comapare with bayer3ch case  
     * without weired circle at bayer3ch
   * more epochs?   
-
+* bayer3ch case
+  * this can be trained easier than 1ch case.  
 
 ## like moire, hard traing patches
 
