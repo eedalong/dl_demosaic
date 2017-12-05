@@ -12,7 +12,8 @@
  * add model configuration(depth)  
  * remove parameters.py  
  * update main.py and test.py  
-
+ * add training case for another dataset  
+ 
 ## like moire, hard traing patches
 
 ## hard negative mining
