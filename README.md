@@ -1,5 +1,19 @@
 # dl_demosaic
 
+* bayer1ch case  
+  * weird circle issue at center(wrong color)  
+  * need to comapare with bayer3ch case  
+    * without weired circle at bayer3ch
+  * more epochs?   
+* bayer3ch case
+  * this can be trained easier than 1ch case.  
+
+## revision list  
+ * add model configuration(depth)  
+ * remove parameters.py  
+ * update main.py and test.py  
+ * add training case for another dataset  
+ 
 ## like moire, hard traing patches
 
 ## hard negative mining
