@@ -1,5 +1,11 @@
 # dl_demosaic
 
+1. bayer1ch case  
+  * weird circle issue at center(wrong color)  
+  * need to comapare with bayer3ch case  
+
+
+
 ## like moire, hard traing patches
 
 ## hard negative mining
