@@ -52,8 +52,8 @@ import cv2
 
 
 # paramters
-patch_size = 16 #16
-batch_size = 32 # 32
+patch_size = 32 #16
+batch_size = 64 # 32
 sigma      = 32/255
 
 # Image Preprocessing

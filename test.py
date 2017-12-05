@@ -2,8 +2,8 @@
 """
 Training a classifier
 =====================
-This is it. You have seen how to define neural networks, compute loss and make
-updates to the weights of the network.
+This is it. You have seen how to define neural modelworks, compute loss and make
+updates to the weights of the modelwork.
 Now you might be thinking,
 What about data?
 ----------------
@@ -16,7 +16,7 @@ Then you can convert this array into a ``torch.*Tensor``.
    SpaCy are useful.
 Specifically for ``vision``, we have created a package called
 ``torchvision``, that has data loaders for common datasets such as
-Imagenet, CIFAR10, MNIST, etc. and data transformers for images, viz.,
+Imagemodel, CIFAR10, MNIST, etc. and data transformers for images, viz.,
 ``torchvision.datasets`` and ``torch.utils.data.DataLoader``.
 This provides a huge convenience and avoids writing boilerplate code.
 For this tutorial, we will use the CIFAR10 dataset.
@@ -31,10 +31,10 @@ Training an image classifier
 We will do the following steps in order:
 1. Load and normalizing the CIFAR10 training and test datasets using
    ``torchvision``
-2. Define a Convolution Neural Network
+2. Define a Convolution Neural modelwork
 3. Define a loss function
-4. Train the network on the training data
-5. Test the network on the test data
+4. Train the modelwork on the training data
+5. Test the modelwork on the test data
 1. Loading and normalizing CIFAR10
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Using ``torchvision``, it’s extremely easy to load CIFAR10.
@@ -73,29 +73,33 @@ testloader = torch.utils.data.DataLoader(dataset=testset,
 
 
 ########################################################################
-# 2. Define a Convolution Neural Network
+# 2. Define a Convolution Neural modelwork
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# Copy the neural network from the Neural Networks section before and modify it to
+# Copy the neural modelwork from the Neural modelworks section before and modify it to
 # take 3-channel images (instead of 1-channel images as it was defined).
 
-net = Net()
+model = Net()
 
-net.load_state_dict(torch.load('./net.pkl'))
-# net.load_state_dict(torch.load('./net_weights/net_p32.pkl'))
+# model.load_state_dict(torch.load('./model.pkl'))
+# model.load_state_dict(torch.load('./model_weights/model_p32.pkl'))
+
+checkpoint = torch.load('./model_best.pth.tar')
+model.load_state_dict(checkpoint['state_dict'])
+
 
 if torch.cuda.is_available():
-    net.cuda()
+    model.cuda()
 
 
 
 ########################################################################
-# 5. Test the network on the test data
+# 5. Test the modelwork on the test data
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-# We have trained the network for 2 passes over the training dataset.
-# But we need to check if the network has learnt anything at all.
+# We have trained the modelwork for 2 passes over the training dataset.
+# But we need to check if the modelwork has learnt anything at all.
 #
-# Let us look at how the network performs on the whole dataset.
+# Let us look at how the modelwork performs on the whole dataset.
 
 
 # show images
@@ -105,10 +109,7 @@ for data in testloader:
     images, labels = data
 
     # Remosaic : RGB to bayer
-    i_bayer = remosaic(images, 0)  # 1ch bayer
-    # demosaic with CV2
-    dem_cv2 = demosaic_cv2(i_bayer, 0)
-
+    i_bayer = remosaic(images, bayer_type)
 
     if torch.cuda.is_available():
         i_bayer = Variable(i_bayer).cuda()
@@ -116,7 +117,7 @@ for data in testloader:
         i_bayer = Variable(i_bayer)
 
 
-    outputs = net(i_bayer)
+    outputs = model(i_bayer)
     predicted_dem = outputs.data
     i_bayer  = i_bayer.data
 
@@ -124,6 +125,9 @@ for data in testloader:
     predicted_dem[predicted_dem < -1] = -1
     predicted_dem[predicted_dem >  1] =  1
 
+    # demosaic with CV2
+    bayer_1ch = remosaic(images, 0)  # 1ch bayer
+    dem_cv2 = demosaic_cv2(bayer_1ch, 0)
 
     #
     bayer_rgb = remosaic(images, 1)  # 3ch bayer

@@ -25,10 +25,11 @@ def conv3x3(in_channels, out_channels):
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
+        self.ch_l1 = 3  # 1
         self.ch_l2 = 64 # 64
         self.ch_l3 = 3
         self.layer1 = nn.Sequential(
-            nn.Conv2d(1, self.ch_l2, kernel_size=3, padding=1),
+            nn.Conv2d(self.ch_l1, self.ch_l2, kernel_size=3, padding=1),
             nn.ReLU())
         self.layer2 = nn.Sequential(
             nn.Conv2d(self.ch_l2, self.ch_l2, kernel_size=3, padding=1),

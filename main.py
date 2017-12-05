@@ -40,6 +40,7 @@ We will do the following steps in order:
 Using ``torchvision``, it’s extremely easy to load CIFAR10.
 """
 
+import argparse
 import os
 import shutil
 import time
@@ -55,15 +56,35 @@ from model import *
 from parameters import *
 
 
+parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
+parser.add_argument('-batch_size', '--batch-size', default=32, type=int,
+                    metavar='N', help='mini-batch size (default: 32)')
+parser.add_argument('-patch_size', '--patch-size', default=32, type=int,
+                    metavar='N', help='input-patch size (default: 32)')
+parser.add_argument('--epochs', default=64, type=int, metavar='N',
+                    help='number of total epochs to run')
+parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
+                    help='manual epoch number (useful on restarts)')
+parser.add_argument('--lr', '--learning-rate', default=0.01, type=float,
+                    metavar='LR', help='initial learning rate')
+parser.add_argument('--print-freq', '-p', default=100, type=int,
+                    metavar='N', help='print frequency (default: 100)')
+# parser.add_argument('--resume', default='', type=str, metavar='PATH',
+parser.add_argument('--resume', default='model_best.pth.tar', type=str, metavar='PATH',
+                    help='path to latest checkpoint (default: none)')
+parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
+                    help='evaluate model on validation set')
 
-
-
+best_min_loss = 1
 
 def main():
+    global args, best_min_loss
+    args = parser.parse_args()
+
     transform = transforms.Compose([
         transforms.Scale(32),
         transforms.RandomHorizontalFlip(),
-        transforms.RandomCrop(patch_size),
+        transforms.RandomCrop(args.patch_size),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])  # This normalize is needed?
 
@@ -83,16 +104,15 @@ def main():
 
     # Data Loader (Input Pipeline)
     train_loader = torch.utils.data.DataLoader(dataset=trainset,
-                                              batch_size=batch_size,
+                                              batch_size=args.batch_size,
                                               shuffle=True)
 
     val_loader = torch.utils.data.DataLoader(dataset=validset,
-                                              batch_size=batch_size,
+                                              batch_size=args.batch_size,
                                               shuffle=False)
 
     ########################################################################
     # Let us show some of the training images, for fun.
-
 
     # get some random training images
     dataiter = iter(train_loader)
@@ -101,7 +121,6 @@ def main():
     # show images
     imshow(torchvision.utils.make_grid(images))
     print('data preparation completed')
-
 
     ########################################################################
     # 2. Define a Convolution Neural modelwork
@@ -113,50 +132,46 @@ def main():
     if torch.cuda.is_available():
         model.cuda()
 
-
     ########################################################################
     # 3. Define a Loss function and optimizer
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Let's use a Classification Cross-Entropy loss and SGD with momentum
-
     import torch.optim as optim
 
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=args_lr)
-
-
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
     # optionally resume from a checkpoint
-    if args_resume:
-        if os.path.isfile(args_resume):
-            print("=> loading checkpoint '{}'".format(args_resume))
-            checkpoint = torch.load(args_resume)
-            args_start_epoch = checkpoint['epoch']
-            best_prec1 = checkpoint['best_prec1']
+    if args.resume:
+        if os.path.isfile(args.resume):
+            print("=> loading checkpoint '{}'".format(args.resume))
+            checkpoint = torch.load(args.resume)
+            args.start_epoch = checkpoint['epoch']
+            best_min_loss = checkpoint['best_min_loss']
             model.load_state_dict(checkpoint['state_dict'])
             optimizer.load_state_dict(checkpoint['optimizer'])
             print("=> loaded checkpoint '{}' (epoch {})"
-                  .format(args_resume, checkpoint['epoch']))
+                  .format(args.resume, checkpoint['epoch']))
         else:
-            print("=> no checkpoint found at '{}'".format(args_resume))
+            print("=> no checkpoint found at '{}'".format(args.resume))
 
 
 
-    for epoch in range(args_start_epoch, args_epochs):
+    for epoch in range(args.start_epoch, args.epochs):
         adjust_learning_rate(optimizer, epoch)
 
         # train for one epoch
         train(train_loader, model, criterion, optimizer, epoch)
 
         # evaluate on validation set
-        prec1 = validate(val_loader, model, criterion)
+        loss_val = validate(val_loader, model, criterion)
 
         # remember best prec@1 and save checkpoint
-        is_best = prec1 > best_prec1
-        best_prec1 = max(prec1, best_prec1)
+        is_best = loss_val < best_min_loss
+        best_min_loss = min(loss_val, best_min_loss)
         save_checkpoint({
             'epoch': epoch + 1,
-            'arch': args_arch,
+            'best_min_loss': best_min_loss,
             'state_dict': model.state_dict(),
             'optimizer' : optimizer.state_dict(),
         }, is_best)
@@ -173,9 +188,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
         data_time.update(time.time() - end)
 
         # Remosaic : RGB to bayer
-        # i_bayer = remosaic(inputs, 1)  # 3ch bayer
-        i_bayer = remosaic(input, 0)  # 1ch bayer
-
+        i_bayer = remosaic(input, bayer_type)
 
         # ground truth : noisy image - clean image(noise)
         ground_truth = input
@@ -192,7 +205,6 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
         # measure accuracy and record loss
         losses.update(loss.data[0], input.size(0))
-
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -203,26 +215,24 @@ def train(train_loader, model, criterion, optimizer, epoch):
         batch_time.update(time.time() - end)
         end = time.time()
 
-        if i % args_print_freq == 0:
+        if i % args.print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
                    epoch, i, len(train_loader), batch_time=batch_time,
-                   data_time=data_time, loss=losses, top1=top1, top5=top5))
+                   data_time=data_time, loss=losses))
 
 
 def validate(val_loader, model, criterion):
     batch_time = AverageMeter()
     losses = AverageMeter()
 
-
     end = time.time()
     for i, (input, target) in enumerate(val_loader):
 
         # Remosaic : RGB to bayer
-        # i_bayer = remosaic(inputs, 1)  # 3ch bayer
-        i_bayer = remosaic(input, 0)  # 1ch bayer
+        i_bayer = remosaic(input, bayer_type)
 
         # ground truth : noisy image - clean image(noise)
         ground_truth = input
@@ -244,16 +254,12 @@ def validate(val_loader, model, criterion):
         batch_time.update(time.time() - end)
         end = time.time()
 
-        if i % args_print_freq == 0:
+        if i % args.print_freq == 0:
             print('Test: [{0}/{1}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
                    i, len(val_loader), batch_time=batch_time, loss=losses))
-
-
-    return loss.data[0]
-
-
+    return losses.avg
 
 
 
@@ -283,7 +289,7 @@ class AverageMeter(object):
 
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = args_lr * (0.1 ** (epoch // 30))
+    lr = args.lr * (0.1 ** (epoch // 30))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 

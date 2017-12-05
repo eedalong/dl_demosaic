@@ -52,10 +52,10 @@ from utils import *
 
 
 # paramters
-patch_size = 16
-batch_size = 32 # 32
+patch_size = 32
+batch_size = 64 # 32
 sigma      = 32/255
-no_epoch   = 4
+no_epoch   = 64 
 
 
 # Image Preprocessing
