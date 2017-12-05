@@ -8,6 +8,11 @@
 * bayer3ch case
   * this can be trained easier than 1ch case.  
 
+## revision list  
+ * add model configuration(depth)  
+ * remove parameters.py  
+ * update main.py and test.py  
+
 ## like moire, hard traing patches
 
 ## hard negative mining
