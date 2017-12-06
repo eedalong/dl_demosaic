@@ -53,7 +53,6 @@ from torch.autograd import Variable
 import torchvision
 from utils import *
 from model import *
-from parameters import *
 import cv2
 
 
@@ -61,8 +60,8 @@ parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 parser.add_argument('-batch_size', '--batch-size', default=32, type=int,
                     metavar='N', help='mini-batch size (default: 32)')
 parser.add_argument('-patch_size', '--patch-size', default=16, type=int,
-                    metavar='N', help='inputss-patch size (default: 32)')
-parser.add_argument('--epochs', default=8, type=int, metavar='N',
+                    metavar='N', help='inputs-patch size (default: 32)')
+parser.add_argument('--epochs', default=24, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
@@ -194,7 +193,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
         data_time.update(time.time() - end)
 
         # Remosaic : RGB to bayer
-        i_bayer = remosaic(inputss, bayer_type)
+        i_bayer = remosaic(inputss, 1)
 
         # ground truth : noisy image - clean image(noise)
         ground_truth = inputss
@@ -238,7 +237,7 @@ def validate(val_loader, model, criterion):
     for i, (inputss, labels) in enumerate(val_loader):
 
         # Remosaic : RGB to bayer
-        i_bayer = remosaic(inputss, bayer_type)
+        i_bayer = remosaic(inputss, 1)
 
         # ground truth : noisy image - clean image(noise)
         ground_truth = inputss
