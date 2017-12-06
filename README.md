@@ -8,6 +8,14 @@
   * 1ch to 3ch transform without position info. is hard to train.   
 * bayer3ch case
   * It can be trained easier than 1ch case.  
+* opencv demosaic
+  * https://docs.opencv.org/3.0-beta/modules/cudaimgproc/doc/color.html  
+    * cvtColor  
+    * demosaicing  
+    * bilinear interpolation : COLOR_BayerBG2BGR , COLOR_BayerGB2BGR , ...    
+    * Malvar-He-Cutler algorithm : COLOR_BayerBG2BGR_MHT, COLOR_BayerGB2BGR_MHT, ...   
+      * Pascal Getreuer, Malvar-He-Cutler Linear Image Demosaicking, Image Processing On Line, 2011  
+
 
 ## revision list   
  * ~~~remove parameters.py~~~  
