@@ -1,13 +1,13 @@
 # dl_demosaic
 
 * bayer1ch case  
-  * weird circle issue at center(wrong color)  
+  * weird circle/square issues at center(wrong color)  
   * need to comapare with bayer3ch case  
-    * without weired circle at bayer3ch
+    * Bayer3ch has no weired center issues.
   * more epochs?   
   * 1ch to 3ch transform without position info. is hard to train.   
 * bayer3ch case
-  * this can be trained easier than 1ch case.  
+  * It can be trained easier than 1ch case.  
 
 ## revision list  
  * add model configuration(depth)  
