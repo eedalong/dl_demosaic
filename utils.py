@@ -92,7 +92,9 @@ def demosaic_cv2(bayer, bseq):
     debayer = np.zeros([batch_size, patch_size, patch_size, 3])
 
     for i in range(batch_size):
-        debayer[i] = cv2.cvtColor(bayer_u8[i,0], cv2.COLOR_BAYER_GR2BGR)
+        debayer[i] = cv2.cvtColor(bayer_u8[i,0], cv2.COLOR_BAYER_GR2BGR)  # bilinear intp.
+        # debayer[i] = cv2.demosaicing(bayer_u8[i,0], cv2.COLOR_BAYER_GR2BGR_EA)  # so so
+        # debayer[i] = cv2.demosaicing(bayer_u8[i, 0], cv2.COLOR_BAYER_GR2BGR_VNG)  # bad
 
     # normalized
     debayer = debayer.astype('float32')/255
