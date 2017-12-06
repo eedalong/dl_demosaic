@@ -9,10 +9,10 @@
 * bayer3ch case
   * It can be trained easier than 1ch case.  
 
-## revision list  
- * add model configuration(depth)  
- * remove parameters.py  
- * update main.py and test.py  
+## revision list   
+ * ~~~remove parameters.py~~~  
+ * ~~~update main.py and test.py~~~  
+ * add model configuration(depth) 
  * add training case for another dataset  
  
 ## like moire, hard training patches
