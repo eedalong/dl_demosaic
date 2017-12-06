@@ -5,6 +5,7 @@
   * need to comapare with bayer3ch case  
     * without weired circle at bayer3ch
   * more epochs?   
+  * 1ch to 3ch transform without position info. is hard to train.   
 * bayer3ch case
   * this can be trained easier than 1ch case.  
 
