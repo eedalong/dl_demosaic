@@ -15,7 +15,7 @@
  * update main.py and test.py  
  * add training case for another dataset  
  
-## like moire, hard traing patches
+## like moire, hard training patches
 
 ## hard negative mining
  adjust a ratio of datasets 
