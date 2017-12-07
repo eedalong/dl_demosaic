@@ -15,12 +15,14 @@
     * bilinear interpolation : COLOR_BayerBG2BGR , COLOR_BayerGB2BGR , ...    
     * Malvar-He-Cutler algorithm : COLOR_BayerBG2BGR_MHT, COLOR_BayerGB2BGR_MHT, ...   
       * Pascal Getreuer, Malvar-He-Cutler Linear Image Demosaicking, Image Processing On Line, 2011  
+* 4 layer => 8 layers
+  * It may be hard to train due to deep layers.  
+  * This network seems to need specific schemes to train deeper network(ex. dropout?, batchnorm?)  
 
 
 ## revision list   
  * ~~~remove parameters.py~~~  
  * ~~~update main.py and test.py~~~  
- * add model configuration(depth) 
  * add training case for another dataset  
  
 ## like moire, hard training patches
