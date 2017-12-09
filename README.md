@@ -19,6 +19,12 @@
   * It may be hard to train due to deep layers.  
   * This network seems to need specific schemes to train deeper network(ex. dropout?, batchnorm?)  
 
+* ADAM is better than SGD  
+
+* Batch size : Bigger is better.  
+
+
+
 
 ## revision list   
  * ~~~remove parameters.py~~~  
