@@ -34,6 +34,9 @@
 
 
 ## gaussian_dem_rgb : input extra ch  
+* use extra rgb 3ch(lpf-dem)
+* + residual learning
+  * (i_bayer_rgb - rgb_dem) - inputs
 
 
 ## dem is only prediction of direction problem? V or H label  
