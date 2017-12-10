@@ -25,6 +25,7 @@
 
 ## residual running
 * Loss : 0.0016(slightly better), P32-B128-L4-C64   
+* more easily trained  
 * ground_truth = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
