@@ -30,6 +30,14 @@
 * predicted_dem = i_bayer - outputs  
 
 
+## Patch to pixel
+
+
+## gaussian_dem_rgb : input extra ch
+
+
+
+
 ## revision list   
  * ~~~remove parameters.py~~~  
  * ~~~update main.py and test.py~~~  
@@ -43,7 +51,9 @@
 ### like moire, hard training patches
 
 ### hard negative mining
- adjust a ratio of datasets 
+* adjust a ratio of datasets   
+* Using PSNR, SSIM, HDR-VDP2, save patches(hard) to image files with labels.
+
  
 ### weighted least squares for loss function
  is this loss function exist in pytorch ?
