@@ -34,7 +34,9 @@
  * ~~~remove parameters.py~~~  
  * ~~~update main.py and test.py~~~  
  * add training case for another dataset  
- 
+   * stl10, cifar100, (Coco)
+   * demosaicnet
+   
 ## like moire, hard training patches
 
 ## hard negative mining
