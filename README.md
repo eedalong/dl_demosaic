@@ -33,7 +33,7 @@
 ## Patch to pixel
 
 
-## gaussian_dem_rgb : input extra ch
+## gaussian_dem_rgb : input extra ch  
 
 
 
