@@ -19,23 +19,51 @@
   * It may be hard to train due to deep layers.  
   * This network seems to need specific schemes to train deeper network(ex. dropout?, batchnorm?)  
 
+* ADAM is better than SGD  
+
+* Batch size : Bigger is better.  
+
+## residual running
+* Loss : 0.0016(slightly better), P32-B128-L4-C64   
+* more easily trained  
+* ground_truth = i_bayer - inputs  
+* predicted_dem = i_bayer - outputs  
+
+
+## Patch to pixel
+
+
+## gaussian_dem_rgb : input extra ch  
+* use extra rgb 3ch(lpf-dem)
+* + residual learning
+  * (i_bayer_rgb - rgb_dem) - inputs
+
+
+## dem is only prediction of direction problem? V or H label  
+
+
 
 ## revision list   
  * ~~~remove parameters.py~~~  
  * ~~~update main.py and test.py~~~  
  * add training case for another dataset  
+   * stl10, cifar100, (Coco)
+   * demosaicnet
+   
+   
+## how to train   
+   
+### like moire, hard training patches
+
+### hard negative mining
+* adjust a ratio of datasets   
+* Using PSNR, SSIM, HDR-VDP2, save patches(hard) to image files with labels.
+
  
-## like moire, hard training patches
+### weighted least squares for loss function
+* is this loss function exist in pytorch ?
+* https://github.com/pytorch/pytorch/blob/master/torch/nn/modules/loss.py  
+* class _WeightedLoss(_Loss):  
+* https://discuss.pytorch.org/t/how-to-implement-weighted-mean-square-error/2547/3  
 
-## hard negative mining
- adjust a ratio of datasets 
- 
-## weighted least squares for loss function
- is this loss function exist in pytorch ?
-
-https://github.com/pytorch/pytorch/blob/master/torch/nn/modules/loss.py  
-class _WeightedLoss(_Loss):  
-
-https://discuss.pytorch.org/t/how-to-implement-weighted-mean-square-error/2547/3  
-
-## add extra label for hard patches as another loss
+### add extra label for hard patches as another loss
