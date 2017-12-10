@@ -37,12 +37,15 @@
    * stl10, cifar100, (Coco)
    * demosaicnet
    
-## like moire, hard training patches
+   
+## how to train   
+   
+### like moire, hard training patches
 
-## hard negative mining
+### hard negative mining
  adjust a ratio of datasets 
  
-## weighted least squares for loss function
+### weighted least squares for loss function
  is this loss function exist in pytorch ?
 
 https://github.com/pytorch/pytorch/blob/master/torch/nn/modules/loss.py  
@@ -50,4 +53,4 @@ class _WeightedLoss(_Loss):
 
 https://discuss.pytorch.org/t/how-to-implement-weighted-mean-square-error/2547/3  
 
-## add extra label for hard patches as another loss
+### add extra label for hard patches as another loss
