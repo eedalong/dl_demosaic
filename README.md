@@ -23,7 +23,10 @@
 
 * Batch size : Bigger is better.  
 
-
+## residual running
+* Loss : 0.0016  
+* ground_truth = i_bayer - inputs  
+* predicted_dem = i_bayer - outputs  
 
 
 ## revision list   
