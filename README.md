@@ -36,6 +36,8 @@
 ## gaussian_dem_rgb : input extra ch  
 
 
+## dem is only prediction of direction problem? V or H label  
+
 
 
 ## revision list   
