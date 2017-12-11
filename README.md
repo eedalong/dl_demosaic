@@ -29,6 +29,9 @@
 * ground_truth = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
+## add training case for another dataset  
+* stl10, cifar100, (Coco)
+* demosaicnet
 
 ## Patch to pixel
 
@@ -49,9 +52,7 @@
 ## revision list   
  * ~~~remove parameters.py~~~  
  * ~~~update main.py and test.py~~~  
- * add training case for another dataset  
-   * stl10, cifar100, (Coco)
-   * demosaicnet
+
    
    
 ## how to train   
