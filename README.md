@@ -33,6 +33,7 @@
 
 ## Patch to pixel  
 1. add extra fully con. layer  
+* fail to train and high complexity
 2. add pooling, fc, relu layer(low compexity)  
 * https://github.com/chson0316/dl_info/blob/master/pytorch_classify_summary.md  
 
