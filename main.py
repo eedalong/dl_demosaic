@@ -57,11 +57,11 @@ import cv2
 
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
-parser.add_argument('-batch_size', '--batch-size', default=32, type=int,
+parser.add_argument('-batch_size', '--batch-size', default=128, type=int,
                     metavar='N', help='mini-batch size (default: 32)')
 parser.add_argument('-patch_size', '--patch-size', default=16, type=int,
                     metavar='N', help='inputs-patch size (default: 32)')
-parser.add_argument('--epochs', default=64, type=int, metavar='N',
+parser.add_argument('--epochs', default=128, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
@@ -120,7 +120,7 @@ def main():
     images, labels = dataiter.next()
 
     # show images
-    imshow(torchvision.utils.make_grid(images))
+    # imshow(torchvision.utils.make_grid(images))
     print('data preparation completed')
 
     ########################################################################
@@ -140,7 +140,8 @@ def main():
     import torch.optim as optim
 
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    # optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
 
 
     # optionally resume from a checkpoint
@@ -339,7 +340,7 @@ class AverageMeter(object):
 
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 16 epochs"""
-    lr = args.lr * (0.1 ** (epoch // 16))
+    lr = args.lr * (0.1 ** (epoch // 128))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
