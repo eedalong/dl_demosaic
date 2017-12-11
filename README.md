@@ -29,9 +29,6 @@
 * ground_truth = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
-## Relu -> leacky Relu?
-* ?? 
-
 
 
 ## Patch to pixel  
