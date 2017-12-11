@@ -49,11 +49,7 @@
 
 
 
-## revision list   
- * ~~~remove parameters.py~~~  
- * ~~~update main.py and test.py~~~  
 
-   
    
 ## how to train   
    
