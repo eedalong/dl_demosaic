@@ -29,21 +29,19 @@
 * ground_truth = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
-## add training case for another dataset  
-* stl10, cifar100, (Coco)
-* demosaicnet
-
 ## Patch to pixel
-
-
-## using LBCNN
-
 
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
 * + residual learning
   * (i_bayer_rgb - rgb_dem) - inputs
 
+## add training case for another dataset  
+* stl10, cifar100, (Coco)
+* demosaicnet
+
+
+## using LBCNN
 
 ## dem is only prediction of direction problem? V or H label  
 
