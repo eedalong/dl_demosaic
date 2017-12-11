@@ -33,6 +33,9 @@
 ## Patch to pixel
 
 
+## using LBCNN
+
+
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
 * + residual learning
