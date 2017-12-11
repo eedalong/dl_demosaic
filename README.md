@@ -29,6 +29,11 @@
 * ground_truth = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
+## Relu -> leacky Relu?
+* ?? 
+
+
+
 ## Patch to pixel  
 1. add extra fully con. layer  
 2. add pooling, fc, relu layer(low compexity)  
