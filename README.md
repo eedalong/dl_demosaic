@@ -34,6 +34,7 @@
 ## Patch to pixel  
 1. add extra fully con. layer  
 2. add pooling, fc, relu layer(low compexity)  
+* https://github.com/chson0316/dl_info/blob/master/pytorch_classify_summary.md  
 
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
