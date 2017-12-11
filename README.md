@@ -23,7 +23,7 @@
 
 * Batch size : Bigger is better.  
 
-## residual running
+## residual learning
 * Loss : 0.0016(slightly better), P32-B128-L4-C64   
 * more easily trained  
 * ground_truth = i_bayer - inputs  
