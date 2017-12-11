@@ -29,7 +29,9 @@
 * ground_truth = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
-## Patch to pixel
+## Patch to pixel  
+1. add extra fully con. layer  
+2. add pooling, fc, relu layer(low compexity)  
 
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
