@@ -29,6 +29,18 @@
 * ground_truth = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
+## add training case for another dataset  
+* stl10, cifar100, (Coco)
+* demosaicnet
+
+## gaussian_dem_rgb : input extra ch  
+* use extra rgb 3ch(lpf-dem)
+* + residual learning
+  * (i_bayer_rgb - rgb_dem) - inputs
+
+## using LBCNN
+
+## hard negative mining
 
 
 ## Patch to pixel  
@@ -37,19 +49,7 @@
 2. add pooling, fc, relu layer(low compexity)  
 * https://github.com/chson0316/dl_info/blob/master/pytorch_classify_summary.md  
 
-## gaussian_dem_rgb : input extra ch  
-* use extra rgb 3ch(lpf-dem)
-* + residual learning
-  * (i_bayer_rgb - rgb_dem) - inputs
 
-## add training case for another dataset  
-* stl10, cifar100, (Coco)
-* demosaicnet
-
-
-## using LBCNN
-
-## dem is only prediction of direction problem? V or H label  
 
 
 
