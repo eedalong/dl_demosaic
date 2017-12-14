@@ -26,8 +26,11 @@
 ## residual learning
 * Loss : 0.0016(slightly better), P32-B128-L4-C64   
 * more easily trained  
-* ground_truth = i_bayer - inputs  
+* ground_truth  = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
+
+## add tensorboard 
+ * https://github.com/chson0316/dl_info/blob/master/pytorch_visualization.md  
 
 ## add training case for another dataset  
 * stl10, cifar100, (Coco)
