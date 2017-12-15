@@ -56,8 +56,9 @@
 
 
 
-
-
+## add extra label for hard patches as another loss
+* It can be likely to auxiliary classifier in GoogLeNet at training phase. 
+* remove this at test phase  
 
    
 ## how to train   
@@ -75,4 +76,3 @@
 * class _WeightedLoss(_Loss):  
 * https://discuss.pytorch.org/t/how-to-implement-weighted-mean-square-error/2547/3  
 
-### add extra label for hard patches as another loss
