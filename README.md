@@ -41,6 +41,8 @@
 * + residual learning
   * (i_bayer_rgb - rgb_dem) - inputs
 
+## use dropout in convnet  
+
 ## using LBCNN
 
 ## hard negative mining
