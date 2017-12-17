@@ -41,7 +41,7 @@
   * (i_bayer_rgb - rgb_dem) - inputs
 
 ## 1x1 conv, depthwise+point-wise cnn
-
+* spatial/cross-channel correlation
 
 ## use dropout in convnet  
 
