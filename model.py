@@ -46,10 +46,10 @@ class Net(nn.Module):
         x = self.layer2(x)
         x = self.layer2(x)
 
-        x = self.layer2(x)
-        x = self.layer2(x)
-        x = self.layer2(x)
-        x = self.layer2(x)
+#        x = self.layer2(x)
+#        x = self.layer2(x)
+#        x = self.layer2(x)
+#        x = self.layer2(x)
 
 #        x = self.layer2(x)
 #        x = self.layer2(x)
