@@ -40,7 +40,8 @@
 * + residual learning
   * (i_bayer_rgb - rgb_dem) - inputs
 
-## 1x1 conv, depthwise+point-wise cnn
+## Depthwise seperable convolution 
+* 1x1 conv, depthwise+point-wise cnn
 * spatial/cross-channel correlation  
 * before or after 1x1 conv   
 
