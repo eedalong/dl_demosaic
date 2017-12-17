@@ -44,10 +44,8 @@
 * depthwise + point-wise cnn(=1x1 conv.)
 * spatial/cross-channel correlation  
 * before or after 1x1 conv   
-* is relu needed between depthwise and pointwise ?
-  * xception uses relu between them.    
-  * depthwise seperable conv doesn't use relu  
-
+* BN+relu are needed between depthwise and pointwise.  
+  
 ## use dropout in convnet  
 
 ## using LBCNN
