@@ -45,7 +45,7 @@
 * spatial/cross-channel correlation  
 * before or after 1x1 conv   
 * is relu needed between depthwise and pointwise ?
-  * xception uses relu between those  
+  * xception uses relu between them.    
   * depthwise seperable conv doesn't use relu  
 
 ## use dropout in convnet  
