@@ -41,9 +41,10 @@
   * (i_bayer_rgb - rgb_dem) - inputs
 
 ## Depthwise seperable convolution 
-* 1x1 conv, depthwise+point-wise cnn
+* depthwise + point-wise cnn(=1x1 conv.)
 * spatial/cross-channel correlation  
 * before or after 1x1 conv   
+* is relu needed between depthwise and pointwise ?
 
 
 ## use dropout in convnet  
