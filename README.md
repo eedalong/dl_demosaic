@@ -33,13 +33,15 @@
  * ~~~https://github.com/chson0316/dl_info/blob/master/pytorch_visualization.md~~~  
 
 ## add training case for another dataset  
-* stl10, cifar100, (Coco)
-* demosaicnet
+* stl10
 
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
 * + residual learning
   * (i_bayer_rgb - rgb_dem) - inputs
+
+## 1x1 conv, depthwise+point-wise cnn
+
 
 ## use dropout in convnet  
 
