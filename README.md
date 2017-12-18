@@ -31,7 +31,8 @@
 
 ## ~~~add tensorboard~~~ 
  * ~~~https://github.com/chson0316/dl_info/blob/master/pytorch_visualization.md~~~  
-
+ * pytorch and tensorflow is conflicted. (except python2.7)
+ 
 ## add training case for another dataset  
 * stl10
 
