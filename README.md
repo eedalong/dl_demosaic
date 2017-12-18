@@ -52,6 +52,9 @@
 
 ## hard negative mining
 
+## Distilling the Knowledge in a Neural Network
+* create more precisely true labels 
+* A huge network is training a smaller network
 
 ## Patch to pixel  
 1. add extra fully con. layer  
