@@ -40,6 +40,7 @@
 * use extra rgb 3ch(lpf-dem)
 * + residual learning
   * (i_bayer_rgb - rgb_dem) - inputs
+* plus detail_layer info.?  
 
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
