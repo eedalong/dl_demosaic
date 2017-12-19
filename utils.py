@@ -110,3 +110,55 @@ def demosaic_cv2(bayer, bseq):
     dem[:,2,:,:] = dem0[:,:,:,2]
 
     return dem
+
+"""
+import numpy as np
+from scipy import signal
+
+
+
+out = torch.zeros(batch_size, 3, patch_size, patch_size)
+
+for i in range(batch_size):
+
+    img = bayer[i] / 2 + 0.5
+    x = img.numpy()
+
+
+    o_dem = np.zeros((3, patch_size, patch_size))
+
+    w_k = np.array([[1, 4, 6, 4, 1],
+                    [4,16,24,16, 4],
+                    [6,24,36,24, 6],
+                    [4,16,24,16, 4],
+                    [1, 4, 6, 4, 1]],
+                   dtype='float')/256
+
+
+    w0 = np.zeros((5,5))
+    w1 = np.zeros((5,5))
+    w2 = np.zeros((5,5))
+    w3 = np.zeros((5,5))
+
+    w0[ ::2,  ::2] = w_k[ ::2,  ::2]
+    w1[ ::2, 1::2] = w_k[ ::2, 1::2]
+    w2[1::2,  ::2] = w_k[1::2,  ::2]
+    w3[1::2, 1::2] = w_k[1::2, 1::2]
+
+
+    o0 = signal.convolve2d(x, w0, boundary='symm', mode='same')
+    o1 = signal.convolve2d(x, w1, boundary='symm', mode='same')
+    o2 = signal.convolve2d(x, w2, boundary='symm', mode='same')
+    o3 = signal.convolve2d(x, w3, boundary='symm', mode='same')
+
+    o_r = o1*4
+    o_g = (o0*4+o3*4)/2
+    o_b = o2*4
+
+    o_dem[0] = o_r
+    o_dem[1] = o_g
+    o_dem[2] = o_b
+
+    out[i] = torch.from_numpy(o_dem)
+
+imshow(torchvision.utils.make_grid(out), 3)
