@@ -21,8 +21,6 @@ def imshow(img, num=0):
     plt.pause(1)
 
 
-
-
 def add_noise(data, sigma):
     # add noise gaussian random rand(im.shape)
     # sigma : noise standard deviation
@@ -41,8 +39,10 @@ def add_noise(data, sigma):
 
     return noisy_data
 
+
 def remosaic(i_rgb, type):
     batch_size, ch, patch_height, patch_width = i_rgb.shape
+
     bayer = torch.zeros(batch_size, 1, patch_height, patch_width)
 
     bayer[:, 0,  ::2,  ::2] = i_rgb[:, 1,  ::2,  ::2]  # G
@@ -53,7 +53,7 @@ def remosaic(i_rgb, type):
     bayer_rgb = torch.zeros(batch_size, 3, patch_height, patch_width)
 
     bayer_rgb[:, 1,  ::2,  ::2] = bayer[:, 0,  ::2,  ::2]  # G
-    bayer_rgb[:, 0,  ::2, 1::2] = bayer[:, 0, ::2, 1::2]  # R
+    bayer_rgb[:, 0,  ::2, 1::2] = bayer[:, 0,  ::2, 1::2]  # R
     bayer_rgb[:, 2, 1::2,  ::2] = bayer[:, 0, 1::2,  ::2]  # B
     bayer_rgb[:, 1, 1::2, 1::2] = bayer[:, 0, 1::2, 1::2]  # G
 
@@ -61,7 +61,6 @@ def remosaic(i_rgb, type):
         o_bayer = bayer
     else:
         o_bayer = bayer_rgb
-
 
     return o_bayer
 
@@ -111,54 +110,79 @@ def demosaic_cv2(bayer, bseq):
 
     return dem
 
-"""
+
 import numpy as np
 from scipy import signal
 
+def dem_gaussian(i_bayer):
+    # GRBG case only
+
+    batch_size, ch, patch_height, patch_width = i_bayer.shape
+
+    out = torch.zeros(batch_size, 3, patch_height, patch_width)
 
 
-out = torch.zeros(batch_size, 3, patch_size, patch_size)
+    for i in range(batch_size):
 
-for i in range(batch_size):
+        img = i_bayer[i, 0]
+        x = img.numpy()
 
-    img = bayer[i] / 2 + 0.5
-    x = img.numpy()
+        w_k = np.array([[1, 4, 6, 4, 1],
+                        [4,16,24,16, 4],
+                        [6,24,36,24, 6],
+                        [4,16,24,16, 4],
+                        [1, 4, 6, 4, 1]],
+                       dtype='float')/256
 
+        w0 = np.zeros((5,5))
+        w1 = np.zeros((5,5))
+        w2 = np.zeros((5,5))
+        w3 = np.zeros((5,5))
 
-    o_dem = np.zeros((3, patch_size, patch_size))
+        w0[ ::2,  ::2] = w_k[ ::2,  ::2]  # c9
+        w1[ ::2, 1::2] = w_k[ ::2, 1::2]  # v6
+        w2[1::2,  ::2] = w_k[1::2,  ::2]  # h6
+        w3[1::2, 1::2] = w_k[1::2, 1::2]  # d4
 
-    w_k = np.array([[1, 4, 6, 4, 1],
-                    [4,16,24,16, 4],
-                    [6,24,36,24, 6],
-                    [4,16,24,16, 4],
-                    [1, 4, 6, 4, 1]],
-                   dtype='float')/256
+        o0 = signal.convolve2d(x, w0, boundary='symm', mode='same')
+        o1 = signal.convolve2d(x, w1, boundary='symm', mode='same')
+        o2 = signal.convolve2d(x, w2, boundary='symm', mode='same')
+        o3 = signal.convolve2d(x, w3, boundary='symm', mode='same')
 
+        gr = np.zeros((patch_height, patch_width))
+        r  = np.zeros((patch_height, patch_width))
+        b  = np.zeros((patch_height, patch_width))
+        gb = np.zeros((patch_height, patch_width))
 
-    w0 = np.zeros((5,5))
-    w1 = np.zeros((5,5))
-    w2 = np.zeros((5,5))
-    w3 = np.zeros((5,5))
+        gr[ ::2,  ::2] = o0[ ::2,  ::2]
+        gr[ ::2, 1::2] = o1[ ::2, 1::2]
+        gr[1::2,  ::2] = o2[1::2,  ::2]
+        gr[1::2, 1::2] = o3[1::2, 1::2]
 
-    w0[ ::2,  ::2] = w_k[ ::2,  ::2]
-    w1[ ::2, 1::2] = w_k[ ::2, 1::2]
-    w2[1::2,  ::2] = w_k[1::2,  ::2]
-    w3[1::2, 1::2] = w_k[1::2, 1::2]
+        r[ ::2,  ::2] = o1[ ::2,  ::2]
+        r[ ::2, 1::2] = o0[ ::2, 1::2]
+        r[1::2,  ::2] = o3[1::2,  ::2]
+        r[1::2, 1::2] = o2[1::2, 1::2]
 
+        b[ ::2,  ::2] = o2[ ::2,  ::2]
+        b[ ::2, 1::2] = o3[ ::2, 1::2]
+        b[1::2,  ::2] = o0[1::2,  ::2]
+        b[1::2, 1::2] = o1[1::2, 1::2]
 
-    o0 = signal.convolve2d(x, w0, boundary='symm', mode='same')
-    o1 = signal.convolve2d(x, w1, boundary='symm', mode='same')
-    o2 = signal.convolve2d(x, w2, boundary='symm', mode='same')
-    o3 = signal.convolve2d(x, w3, boundary='symm', mode='same')
+        gb[ ::2,  ::2] = o3[ ::2,  ::2]
+        gb[ ::2, 1::2] = o2[ ::2, 1::2]
+        gb[1::2,  ::2] = o1[1::2,  ::2]
+        gb[1::2, 1::2] = o0[1::2, 1::2]
 
-    o_r = o1*4
-    o_g = (o0*4+o3*4)/2
-    o_b = o2*4
+        o_r = r*4
+        o_g = ((gr+gb)*4)/2
+        o_b = b*4
 
-    o_dem[0] = o_r
-    o_dem[1] = o_g
-    o_dem[2] = o_b
+        o_dem = np.zeros((3, patch_height, patch_width))
+        o_dem[0] = o_r
+        o_dem[1] = o_g
+        o_dem[2] = o_b
 
-    out[i] = torch.from_numpy(o_dem)
+        out[i] = torch.from_numpy(o_dem)
 
-imshow(torchvision.utils.make_grid(out), 3)
+    # imshow(torchvision.utils.make_grid(out), 3)
