@@ -29,12 +29,12 @@
 * ground_truth  = i_bayer - inputs  
 * predicted_dem = i_bayer - outputs  
 
-## ~~~add tensorboard~~~ 
- * ~~~https://github.com/chson0316/dl_info/blob/master/pytorch_visualization.md~~~  
- * pytorch and tensorflow is conflicted. (except python2.7)
- 
 ## add training case for another dataset  
 * stl10
+
+## add tensorboard 
+ * https://github.com/chson0316/dl_info/blob/master/pytorch_visualization.md
+
 
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
