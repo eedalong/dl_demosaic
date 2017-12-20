@@ -57,11 +57,11 @@ import cv2
 
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
-parser.add_argument('-batch_size', '--batch-size', default=128, type=int,
+parser.add_argument('-batch_size', '--batch-size', default=16, type=int,
                     metavar='N', help='mini-batch size (default: 32)')
-parser.add_argument('-patch_size', '--patch-size', default=31, type=int,
+parser.add_argument('-patch_size', '--patch-size', default=32, type=int,
                     metavar='N', help='inputs-patch size (default: 32)')
-parser.add_argument('--epochs', default=32, type=int, metavar='N',
+parser.add_argument('--epochs', default=64, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
@@ -83,25 +83,24 @@ def main():
     args = parser.parse_args()
 
     transform = transforms.Compose([
-        transforms.Scale(32),
+        transforms.Scale(96),   # 32, 96
         transforms.RandomHorizontalFlip(),
         transforms.RandomCrop(args.patch_size),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])  # This normalize is needed?
 
-    # CIFAR-10 Dataset
-    trainset = dsets.CIFAR10(root='./data/',
-                             train=True,
+
+    # STL10 Dataset
+    trainset = dsets.STL10(root='./data/',
+                             split='train',
                              transform=transform,
                              download=True)
 
-    # validset = dsets.CIFAR10(root='./data/',
-    #                              train     = False,
-    #                              transform = transforms.ToTensor())
-
-    validset = dsets.CIFAR10(root='./data/',
-                             train=False,
+    validset = dsets.STL10(root='./data/',
+                             split='test',
                              transform=transform)
+
+
 
     # Data Loader (inputs Pipeline)
     train_loader = torch.utils.data.DataLoader(dataset=trainset,
@@ -194,10 +193,17 @@ def train(train_loader, model, criterion, optimizer, epoch):
         data_time.update(time.time() - end)
 
         # Remosaic : RGB to bayer
-        i_bayer = remosaic(inputs, 1)
+        i_bayer0 = remosaic(inputs, 1)
+
+        # test
+        i_bayer1 = remosaic(inputs, 0)
+        rgb_dem  = dem_gaussian(i_bayer1)
+        detail = i_bayer0 - rgb_dem
+        i_bayer = detail
 
         # ground truth : noisy image - clean image(noise)
-        ground_truth = i_bayer - inputs
+        # ground_truth = i_bayer - inputs
+        ground_truth = rgb_dem - inputs
 
         # wrap them in Variable
         if torch.cuda.is_available():
@@ -238,10 +244,17 @@ def validate(val_loader, model, criterion):
     for i, (inputs, labels) in enumerate(val_loader):
 
         # Remosaic : RGB to bayer
-        i_bayer = remosaic(inputs, 1)
+        i_bayer0 = remosaic(inputs, 1)
+
+        # test
+        i_bayer1 = remosaic(inputs, 0)
+        rgb_dem  = dem_gaussian(i_bayer1)
+        detail = i_bayer0 - rgb_dem
+        i_bayer = detail
 
         # ground truth : noisy image - clean image(noise)
-        ground_truth = i_bayer - inputs
+        # ground_truth = i_bayer - inputs
+        ground_truth = rgb_dem - inputs
 
         # wrap them in Variable
         if torch.cuda.is_available():
@@ -276,7 +289,13 @@ def test(val_loader, model):
         images, labels = data
 
         # Remosaic : RGB to bayer
-        i_bayer = remosaic(images, 1) # 3ch bayer
+        i_bayer0 = remosaic(images, 1) # 3ch bayer
+
+        # test
+        i_bayer1 = remosaic(images, 0)
+        rgb_dem  = dem_gaussian(i_bayer1)
+        detail = i_bayer0 - rgb_dem
+        i_bayer = detail
 
         if torch.cuda.is_available():
             i_bayer = Variable(i_bayer).cuda()
@@ -286,7 +305,11 @@ def test(val_loader, model):
         outputs = model(i_bayer)
         i_bayer  = i_bayer.data
         outputs  = outputs.data
-        predicted_dem = i_bayer - outputs
+
+
+
+        # predicted_dem = i_bayer - outputs
+        predicted_dem = rgb_dem - outputs.cpu()
 
         # clip
         predicted_dem[predicted_dem < -1] = -1
@@ -341,7 +364,7 @@ class AverageMeter(object):
 
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 16 epochs"""
-    lr = args.lr * (0.1 ** (epoch // 64))
+    lr = args.lr * (0.1 ** (epoch // 128))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 

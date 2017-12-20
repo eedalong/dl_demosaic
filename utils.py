@@ -116,11 +116,8 @@ from scipy import signal
 
 def dem_gaussian(i_bayer):
     # GRBG case only
-
     batch_size, ch, patch_height, patch_width = i_bayer.shape
-
     out = torch.zeros(batch_size, 3, patch_height, patch_width)
-
 
     for i in range(batch_size):
 
@@ -186,3 +183,4 @@ def dem_gaussian(i_bayer):
         out[i] = torch.from_numpy(o_dem)
 
     # imshow(torchvision.utils.make_grid(out), 3)
+    return out
