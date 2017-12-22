@@ -49,8 +49,9 @@
 * http://www.mit.edu/~hangzhao/  
 ### Loss Functions for Neural Networks for Image Processing
 * http://on-demand.gputechconf.com/gtc/2017/presentation/s7447-orazio-gallo-image-restoration-with-neural-networks.pdf   
-* http://research.nvidia.com/sites/default/files/pubs/2017-03_Loss-Functions-for/comparison_tci.pdf   
-* https://arxiv.org/pdf/1511.08861.pdf
+* http://research.nvidia.com/sites/default/files/pubs/2017-03_Loss-Functions-for/comparison_tci.pdf    
+* https://arxiv.org/pdf/1511.08861.pdf  
+* http://research.nvidia.com/sites/default/files/pubs/2017-03_Loss-Functions-for/NN_ImgProc.pdf  
 ### nvidia research
 https://www.nvidia.com/en-us/research/  
 https://github.com/NVlabs  
