@@ -58,11 +58,19 @@
 * before or after 1x1 conv   
 * BN+relu are needed between depthwise and pointwise.  
   
-## use dropout in convnet  
+## add extra label for hard patches as another loss
+* It can be likely to auxiliary classifier in GoogLeNet at training phase. 
+* remove this at test phase  
+
 
 ## using LBCNN
 
 ## hard negative mining
+
+## RWB, RGBIR
+
+
+## use dropout in convnet  
 
 ## Distilling the Knowledge in a Neural Network
 * create more precisely true labels 
@@ -76,9 +84,7 @@
 
 
 
-## add extra label for hard patches as another loss
-* It can be likely to auxiliary classifier in GoogLeNet at training phase. 
-* remove this at test phase  
+
 
    
 ## how to train   
