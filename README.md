@@ -53,6 +53,7 @@
 * https://arxiv.org/pdf/1511.08861.pdf
 ### nvidia research
 https://www.nvidia.com/en-us/research/  
+https://github.com/NVlabs  
 
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
