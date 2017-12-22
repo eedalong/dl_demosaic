@@ -59,6 +59,10 @@
 https://www.nvidia.com/en-us/research/  
 https://github.com/NVlabs  
 
+### pytorch : MS-SSIM
+https://github.com/Po-Hsun-Su/pytorch-ssim  
+https://github.com/chainer/chainer/issues/2503  
+
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
 * spatial/cross-channel correlation  
