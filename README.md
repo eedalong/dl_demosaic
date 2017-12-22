@@ -42,6 +42,12 @@
   * (i_bayer_rgb - rgb_dem) - inputs
 * plus detail_layer info.?  
 
+
+## use Y-C instead of RGB
+
+## ?
+
+
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
 * spatial/cross-channel correlation  
