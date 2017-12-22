@@ -45,7 +45,8 @@
 
 ## use Y-C instead of RGB
 
-## ?
+## Mixed Loss function
+* http://on-demand.gputechconf.com/gtc/2017/presentation/s7447-orazio-gallo-image-restoration-with-neural-networks.pdf  
 
 
 ## Depthwise seperable convolution 
