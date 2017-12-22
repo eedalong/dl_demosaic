@@ -60,6 +60,7 @@ https://www.nvidia.com/en-us/research/
 https://github.com/NVlabs  
 
 ### pytorch : MS-SSIM
+https://github.com/chson0316/pytorch-image-comp-rnn  
 https://github.com/Po-Hsun-Su/pytorch-ssim  
 https://github.com/chainer/chainer/issues/2503  
 
