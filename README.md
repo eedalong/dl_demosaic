@@ -51,7 +51,8 @@
 * http://on-demand.gputechconf.com/gtc/2017/presentation/s7447-orazio-gallo-image-restoration-with-neural-networks.pdf   
 * http://research.nvidia.com/sites/default/files/pubs/2017-03_Loss-Functions-for/comparison_tci.pdf   
 * https://arxiv.org/pdf/1511.08861.pdf
-
+### nvidia research
+https://www.nvidia.com/en-us/research/  
 
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
