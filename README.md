@@ -43,7 +43,6 @@
 * plus detail_layer info.?  
 
 
-## use Y-C instead of RGB
 
 ## Mixed Loss function  : NVIDIA Works
 * http://www.mit.edu/~hangzhao/  
@@ -63,6 +62,9 @@ https://github.com/NVlabs
 https://github.com/chson0316/pytorch-image-comp-rnn  
 https://github.com/Po-Hsun-Su/pytorch-ssim  
 https://github.com/chainer/chainer/issues/2503  
+
+## use Y-C instead of RGB
+
 
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
