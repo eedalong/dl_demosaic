@@ -38,10 +38,11 @@
 
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
-* + residual learning
-  * (i_bayer_rgb - rgb_dem) - inputs
-* plus detail_layer info.?  
-
+* residual learning
+* net.input : i_bayer_3ch - rgb_dem
+* ground_truth : rgb_dem - inputs
+* predicted_dem: rgb_dem - net.outputs   
+* plus detail_layer info.?
 
 
 ## Mixed Loss function  : NVIDIA Works
