@@ -39,7 +39,7 @@
 ## gaussian_dem_rgb : input extra ch  
 * use extra rgb 3ch(lpf-dem)
 * residual learning
-* net.input : i_bayer_3ch - rgb_dem
+* net.input : i_bayer_3ch - rgb_dem  (or i_bayer_3ch, concat(i_bayer_3ch, rgb_dem))  
 * ground_truth : rgb_dem - inputs
 * predicted_dem: rgb_dem - net.outputs  
 * gt : rgb_dem - i_bayer - inputs ??
