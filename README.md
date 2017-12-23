@@ -41,7 +41,8 @@
 * residual learning
 * net.input : i_bayer_3ch - rgb_dem
 * ground_truth : rgb_dem - inputs
-* predicted_dem: rgb_dem - net.outputs   
+* predicted_dem: rgb_dem - net.outputs  
+* gt : rgb_dem - i_bayer - inputs ??
 * plus detail_layer info.?
 
 
