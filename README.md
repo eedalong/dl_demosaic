@@ -66,7 +66,6 @@ https://github.com/chson0316/pytorch-image-comp-rnn
 https://github.com/Po-Hsun-Su/pytorch-ssim  
 https://github.com/chainer/chainer/issues/2503  
 
-## use Y-C instead of RGB
 
 
 ## Depthwise seperable convolution 
@@ -74,13 +73,19 @@ https://github.com/chainer/chainer/issues/2503
 * spatial/cross-channel correlation  
 * before or after 1x1 conv   
 * BN+relu are needed between depthwise and pointwise.  
-  
+
+
+## using LBCNN
+
+
 ## add extra label for hard patches as another loss
 * It can be likely to auxiliary classifier in GoogLeNet at training phase. 
 * remove this at test phase  
 
 
-## using LBCNN
+
+## use Y-C instead of RGB
+
 
 ## hard negative mining
 
