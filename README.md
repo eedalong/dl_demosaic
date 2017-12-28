@@ -66,7 +66,10 @@ https://github.com/chson0316/pytorch-image-comp-rnn
 https://github.com/Po-Hsun-Su/pytorch-ssim  
 https://github.com/chainer/chainer/issues/2503  
 
-
+### pytorch custom loss function
+https://discuss.pytorch.org/t/build-your-own-loss-function-in-pytorch/235/8  
+https://discuss.pytorch.org/t/build-your-own-loss-function-in-pytorch/235/13  
+https://discuss.pytorch.org/t/solved-what-is-the-correct-way-to-implement-custom-loss-function/3568  
 
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
