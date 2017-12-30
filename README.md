@@ -71,6 +71,28 @@ https://discuss.pytorch.org/t/build-your-own-loss-function-in-pytorch/235/8
 https://discuss.pytorch.org/t/build-your-own-loss-function-in-pytorch/235/13  
 https://discuss.pytorch.org/t/solved-what-is-the-correct-way-to-implement-custom-loss-function/3568  
 
+```
+
+SECTION 5 - CUSTOM LOSS FUNCTIONS
+
+Now that we have our model all in place we can load anything and create any architecture we want. That leaves us with 2 important components in any pipeline - Loading the data, and the training part. Let's take a look at the training part. The two most important components of this step are the optimizer and the loss function. The loss function quantifies how far our existing model is from where we want to be, and the optimizer decides how to update parameters such that we can minimize the loss.
+
+Sometimes, we need to define our own loss functions. And here are a few things to know about this -
+
+    custom Loss functions are defined using a custom class too. They inherit from torch.nn.Module just like the custom model.
+    Often, we need to change the dimenions of one of our inputs. This can be done using view() function.
+    If we want to add a dimension to a tensor, use the unsqueeze() function.
+    The value finally being returned by a loss function MUST BE a scalar value. Not a vector/tensor.
+    The value being returned must be a Variable. This is so that it can be used to update the parameters. The best way to do so is to just make sure that both x and y being passed in are Variables. That way any function of the two will also be a Variable.
+    A Pytorch Variable is just a Pytorch Tensor, but Pytorch is tracking the operations being done on it so that it can backpropagate to get the gradient.
+
+Here I show a custom loss called Regress_Loss which takes as input 2 kinds of input x and y. Then it reshapes x to be similar to y and finally returns the loss by calculating L2 difference between reshaped x and y. This is a standard thing you'll run across very often in training networks.
+
+Consider x to be shape (5,10) and y to be shape (5,5,10). So, we need to add a dimension to x, then repeat it along the added dimension to match the dimension of y. Then, (x-y) will be the shape (5,5,10). We will have to add over all three dimensions i.e. three torch.sum() to get a scalar.
+```
+
+
+
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
 * spatial/cross-channel correlation  
