@@ -77,7 +77,8 @@ SECTION 5 - CUSTOM LOSS FUNCTIONS
 
 Now that we have our model all in place we can load anything and create any architecture we want. 
 That leaves us with 2 important components in any pipeline - Loading the data, and the training part. 
-Let's take a look at the training part. The two most important components of this step are the optimizer and the loss function. The loss function quantifies how far our existing model is from where we want to be, and the optimizer decides how to update parameters such that we can minimize the loss.
+Let's take a look at the training part. The two most important components of this step are the optimizer and the loss function. The loss function quantifies how far our existing model is from where we want to be, 
+and the optimizer decides how to update parameters such that we can minimize the loss.
 
 Sometimes, we need to define our own loss functions. And here are a few things to know about this -
 
@@ -95,7 +96,8 @@ Sometimes, we need to define our own loss functions. And here are a few things t
     but Pytorch is tracking the operations being done on it so that it can backpropagate to get the gradient.
 
 Here I show a custom loss called Regress_Loss which takes as input 2 kinds of input x and y. 
-Then it reshapes x to be similar to y and finally returns the loss by calculating L2 difference between reshaped x and y. 
+Then it reshapes x to be similar to y and finally returns the loss 
+by calculating L2 difference between reshaped x and y. 
 This is a standard thing you'll run across very often in training networks.
 
 Consider x to be shape (5,10) and y to be shape (5,5,10). So, we need to add a dimension to x,
