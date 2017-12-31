@@ -54,14 +54,16 @@ import torchvision
 from utils import *
 from model import *
 import cv2
+from logger import Logger
+
 
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
-parser.add_argument('-batch_size', '--batch-size', default=16, type=int,
+parser.add_argument('-batch_size', '--batch-size', default=32, type=int,
                     metavar='N', help='mini-batch size (default: 32)')
-parser.add_argument('-patch_size', '--patch-size', default=32, type=int,
+parser.add_argument('-patch_size', '--patch-size', default=15, type=int,
                     metavar='N', help='inputs-patch size (default: 32)')
-parser.add_argument('--epochs', default=64, type=int, metavar='N',
+parser.add_argument('--epochs', default=1536, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
@@ -75,6 +77,8 @@ parser.add_argument('--resume_model', default='model_best.pth.tar', type=str, me
                     help='path to latest checkpoint (default: none)')
 parser.add_argument('--test', dest='test', action='store_true',
                     help='test/evaluate model on validation/test set')
+parser.add_argument('--dataset', default=0, type=int, metavar='N',
+                    help='type of datasets:cifar10 or stl10')
 
 best_loss = 1
 
@@ -82,24 +86,46 @@ def main():
     global args, best_loss
     args = parser.parse_args()
 
-    transform = transforms.Compose([
-        transforms.Scale(96),   # 32, 96
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomCrop(args.patch_size),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])  # This normalize is needed?
+    if args.dataset == 0:
+        # STL10 Dataset
+        print('STL-10 Dataset')
+        transform = transforms.Compose([
+            transforms.Scale(96),   # 32, 96
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomCrop(args.patch_size),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])  # This normalize is needed?
 
+        trainset = dsets.STL10(root='./data/',
+                                 split='train',
+                                 transform=transform,
+                                 download=True)
 
-    # STL10 Dataset
-    trainset = dsets.STL10(root='./data/',
-                             split='train',
-                             transform=transform,
-                             download=True)
+        validset = dsets.STL10(root='./data/',
+                                 split='test',
+                                 transform=transform)
+    else:
+        # CIFAR-10 Dataset
+        print('CIFAR-10 Dataset')
+        transform = transforms.Compose([
+            transforms.Scale(32),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomCrop(args.patch_size),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])  # This normalize is needed?
 
-    validset = dsets.STL10(root='./data/',
-                             split='test',
-                             transform=transform)
+        trainset = dsets.CIFAR10(root='./data/',
+                                 train=True,
+                                 transform=transform,
+                                 download=True)
 
+        # validset = dsets.CIFAR10(root='./data/',
+        #                              train     = False,
+        #                              transform = transforms.ToTensor())
+
+        validset = dsets.CIFAR10(root='./data/',
+                                 train=False,
+                                 transform=transform)
 
 
     # Data Loader (inputs Pipeline)
@@ -131,6 +157,11 @@ def main():
     model = Net()
     if torch.cuda.is_available():
         model.cuda()
+
+
+    # Set the logger
+    logger = Logger('./logs')
+
 
     ########################################################################
     # 3. Define a Loss function and optimizer
@@ -166,7 +197,7 @@ def main():
         adjust_learning_rate(optimizer, epoch)
 
         # train for one epoch
-        train(train_loader, model, criterion, optimizer, epoch)
+        loss_train = train(train_loader, model, criterion, optimizer, epoch)
 
         # evaluate on validation set
         loss_val = validate(val_loader, model, criterion)
@@ -180,6 +211,35 @@ def main():
             'state_dict': model.state_dict(),
             'optimizer' : optimizer.state_dict(),
         }, is_best)
+
+
+        #============ TensorBoard logging ============#
+        # (1) Log the scalar values
+        info = {
+            'loss0_train': loss_train,
+            'loss1_valid': loss_val,
+            'loss2_diff': loss_train-loss_val,
+            'loss3_best': best_loss
+        }
+
+        for tag, value in info.items():
+            logger.scalar_summary(tag, value, epoch+1)
+
+        # (2) Log values and gradients of the parameters (histogram)
+        for tag, value in model.named_parameters():
+            tag = tag.replace('.', '/')
+            logger.histo_summary(tag, to_np(value), epoch+1)
+            logger.histo_summary(tag+'/grad', to_np(value.grad), epoch+1)
+
+
+def to_np(x):
+    return x.data.cpu().numpy()
+
+def to_var(x):
+    if torch.cuda.is_available():
+        x = x.cuda()
+    return Variable(x)
+
 
 
 def train(train_loader, model, criterion, optimizer, epoch):
@@ -198,21 +258,19 @@ def train(train_loader, model, criterion, optimizer, epoch):
         # test
         i_bayer1 = remosaic(inputs, 0)
         rgb_dem  = dem_gaussian(i_bayer1)
-        detail = i_bayer0 - rgb_dem
-        i_bayer = detail
+        detail = rgb_dem - i_bayer0
+        i_net = detail
 
-        # ground truth : noisy image - clean image(noise)
-        # ground_truth = i_bayer - inputs
         ground_truth = rgb_dem - inputs
 
         # wrap them in Variable
         if torch.cuda.is_available():
-            i_bayer, ground_truth = Variable(i_bayer).cuda(), Variable(ground_truth).cuda()
+            i_net, ground_truth = Variable(i_net).cuda(), Variable(ground_truth).cuda()
         else:
-            i_bayer, ground_truth = Variable(i_bayer), Variable(ground_truth)
+            i_net, ground_truth = Variable(i_net), Variable(ground_truth)
 
         # compute output
-        output = model(i_bayer)
+        output = model(i_net)
         loss = criterion(output, ground_truth)
 
         # measure accuracy and record loss
@@ -234,6 +292,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
                    epoch, i, len(train_loader), batch_time=batch_time,
                    data_time=data_time, loss=losses))
+    return losses.avg
+
 
 
 def validate(val_loader, model, criterion):
@@ -249,21 +309,19 @@ def validate(val_loader, model, criterion):
         # test
         i_bayer1 = remosaic(inputs, 0)
         rgb_dem  = dem_gaussian(i_bayer1)
-        detail = i_bayer0 - rgb_dem
-        i_bayer = detail
+        detail = rgb_dem - i_bayer0
+        i_net = detail
 
-        # ground truth : noisy image - clean image(noise)
-        # ground_truth = i_bayer - inputs
         ground_truth = rgb_dem - inputs
 
         # wrap them in Variable
         if torch.cuda.is_available():
-            i_bayer, ground_truth = Variable(i_bayer).cuda(), Variable(ground_truth).cuda()
+            i_net, ground_truth = Variable(i_net).cuda(), Variable(ground_truth).cuda()
         else:
-            i_bayer, ground_truth = Variable(i_bayer), Variable(ground_truth)
+            i_net, ground_truth = Variable(i_net), Variable(ground_truth)
 
         # compute output
-        output = model(i_bayer)
+        output = model(i_net)
         loss = criterion(output, ground_truth)
 
         # measure accuracy and record loss
@@ -294,21 +352,18 @@ def test(val_loader, model):
         # test
         i_bayer1 = remosaic(images, 0)
         rgb_dem  = dem_gaussian(i_bayer1)
-        detail = i_bayer0 - rgb_dem
-        i_bayer = detail
+        detail = rgb_dem - i_bayer0
+        i_net = detail
 
         if torch.cuda.is_available():
-            i_bayer = Variable(i_bayer).cuda()
+            i_net = Variable(i_net).cuda()
         else:
-            i_bayer = Variable(i_bayer)
+            i_net = Variable(i_net)
 
-        outputs = model(i_bayer)
-        i_bayer  = i_bayer.data
+        outputs = model(i_net)
+        i_net  = i_net.data
         outputs  = outputs.data
 
-
-
-        # predicted_dem = i_bayer - outputs
         predicted_dem = rgb_dem - outputs.cpu()
 
         # clip
@@ -364,7 +419,7 @@ class AverageMeter(object):
 
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 16 epochs"""
-    lr = args.lr * (0.1 ** (epoch // 128))
+    lr = args.lr * (0.5 ** (epoch // 256))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 

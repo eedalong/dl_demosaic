@@ -41,7 +41,7 @@ def add_noise(data, sigma):
 
 
 def remosaic(i_rgb, type):
-    batch_size, ch, patch_height, patch_width = i_rgb.shape
+    batch_size, ch, patch_height, patch_width = i_rgb.size()
 
     bayer = torch.zeros(batch_size, 1, patch_height, patch_width)
 
@@ -77,7 +77,7 @@ def unnormalize(images):
 
 import cv2
 def demosaic_cv2(bayer, bseq):
-    batch_size, ch, patch_height, patch_width = bayer.shape
+    batch_size, ch, patch_height, patch_width = bayer.size()
     patch_size  = patch_width
 
     bseq = cv2.COLOR_BAYER_GR2BGR
@@ -116,7 +116,7 @@ from scipy import signal
 
 def dem_gaussian(i_bayer):
     # GRBG case only
-    batch_size, ch, patch_height, patch_width = i_bayer.shape
+    batch_size, ch, patch_height, patch_width = i_bayer.size()
     out = torch.zeros(batch_size, 3, patch_height, patch_width)
 
     for i in range(batch_size):
