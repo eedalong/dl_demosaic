@@ -126,8 +126,9 @@ class Regress_Loss(torch.nn.Module):
 ```
 
 ### test ssim to main_residual.py
-* 
-
+* SSIM is more early trained than MSE
+* SSIM's window size is parameter.(gaussian window)
+* MS-SSIM is free to window size ???
 
 ## Depthwise seperable convolution 
 * depthwise + point-wise cnn(=1x1 conv.)
