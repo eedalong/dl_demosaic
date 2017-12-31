@@ -63,7 +63,7 @@ parser.add_argument('-batch_size', '--batch-size', default=32, type=int,
                     metavar='N', help='mini-batch size (default: 32)')
 parser.add_argument('-patch_size', '--patch-size', default=15, type=int,
                     metavar='N', help='inputs-patch size (default: 32)')
-parser.add_argument('--epochs', default=1536, type=int, metavar='N',
+parser.add_argument('--epochs', default=1024, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
