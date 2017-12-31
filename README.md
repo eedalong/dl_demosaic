@@ -125,6 +125,8 @@ class Regress_Loss(torch.nn.Module):
 
 ```
 
+### test ssim to main_residual.py
+* 
 
 
 ## Depthwise seperable convolution 
