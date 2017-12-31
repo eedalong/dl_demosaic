@@ -126,6 +126,7 @@ class Regress_Loss(torch.nn.Module):
 ```
 
 ### test ssim to main_residual.py
+* Loss for SSIM : 1-ssim (ssim: 0~1)
 * SSIM is more early trained than MSE
 * SSIM's window size is parameter.(gaussian window)
 * MS-SSIM is free to window size ???
