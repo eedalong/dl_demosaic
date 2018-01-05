@@ -133,10 +133,16 @@ class Regress_Loss(torch.nn.Module):
 * SSIM's window size is parameter.(gaussian window)
 * MS-SSIM is free to window size ???
 
-### ssim limitation
+### SSIM limitation
 * cannot be calculated in some boundary  
 * maximizing ssim for the centeral pixel  
 * use nvidia lab loss.py
+
+### Variants of SSIM
+* Three-component SSIM (3-SSIM) is a form of SSIM
+  that takes into account the fact that 
+  the human eye can see differences more precisely on textured or edge regions than on smooth regions.  
+* https://live.ece.utexas.edu/publications/2010/li_jei_jan10.pdf  
 
 ## other residual 
 * use extra dem-gauss ch to input ch  
