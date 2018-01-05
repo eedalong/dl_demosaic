@@ -133,6 +133,11 @@ class Regress_Loss(torch.nn.Module):
 * SSIM's window size is parameter.(gaussian window)
 * MS-SSIM is free to window size ???
 
+### ssim limitation
+* cannot be calculated in some boundary  
+* maximizing ssim for the centeral pixel  
+
+
 ## other residual 
 * use extra dem-gauss ch to input ch  
 
