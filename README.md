@@ -135,8 +135,8 @@ class Regress_Loss(torch.nn.Module):
 
 ### ssim limitation
 * cannot be calculated in some boundary  
-* maximizing ssim for the centeral pixel  
-
+* maximizing ssim for the centeral pixel  
+* use nvidia lab loss.py
 
 ## other residual 
 * use extra dem-gauss ch to input ch  
