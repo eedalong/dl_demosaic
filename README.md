@@ -144,6 +144,9 @@ class Regress_Loss(torch.nn.Module):
   the human eye can see differences more precisely on textured or edge regions than on smooth regions.  
 * https://live.ece.utexas.edu/publications/2010/li_jei_jan10.pdf  
 
+### MSE and RMSE loss in pytorch
+* https://gist.github.com/kdubovikov/eb57c2abcdc665d5326ed15111287d20  
+
 ## other residual 
 * use extra dem-gauss ch to input ch  
 
