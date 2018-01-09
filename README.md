@@ -147,6 +147,16 @@ class Regress_Loss(torch.nn.Module):
 ### MSE and RMSE loss in pytorch
 * https://gist.github.com/kdubovikov/eb57c2abcdc665d5326ed15111287d20  
 
+
+## priority works
+### Yuv/Lab domain
+### L1+L2 mix., L1 performance. edge/texture/flat weighted loss
+### hard negative mining
+### using demosaicnet' DB. moire dataset used only
+### 16bit tensor
+### increase patch size 
+### use and test Nvidia demosaic network   
+
 ## other residual 
 * use extra dem-gauss ch to input ch  
 
